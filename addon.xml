@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.cnn" version="1.0.0" name="Kodi CNN World Grabber" provider-name="the-blue-mage">
+<addon id="plugin.video.cnn" version="1.0.0" name="CNN Video Grabber" provider-name="the-blue-mage">
     <license>GPL-2.0</license>
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -9,8 +9,8 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Kodi CNN World Grabber</summary>
-        <description lang="en_GB">Grabs videos and live stream from CNN World/International.</description>
+        <summary lang="en">CNN Video Grabber</summary>
+        <description lang="en_GB">Streams CNN World/International live and on-demand videos directly on Kodi.</description>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
