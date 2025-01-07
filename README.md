@@ -1,13 +1,13 @@
-# Kodi CNN World Grabber
+# Kodi CNN Video Grabber
 
 **Addon for Kodi** to grab videos and live streams from CNN World/International.
 
 ## Description
-The **Kodi CNN World Grabber** addon allows users to access and stream content from CNN World and CNN International. This addon is perfect for keeping up-to-date with world news and live broadcasts from CNN.
+The **Kodi CNN Video Grabber** addon allows users to access and stream content from CNN World and CNN International. It provides easy access to both live broadcasts and on-demand videos, making it perfect for keeping up-to-date with global news and CNN's latest content.
 
 ## Features
-- Access to videos and live streams from CNN World/International.
-- Easy-to-use interface for browsing CNN content.
+- Access to both live streams and on-demand videos from CNN World/International.
+- Easy-to-navigate interface for browsing CNN content.
 - Regularly updated with the latest content.
 
 ## Requirements
@@ -17,7 +17,7 @@ The **Kodi CNN World Grabber** addon allows users to access and stream content f
 
 ## Installation
 1. Download the `.zip` file of the addon.
-2. Open Kodi and go to **Add-ons** > **Install from zip file**.
+2. Open Kodi and go to **Add-ons** > **Install from ZIP file**.
 3. Select the downloaded `.zip` file.
 4. The addon will be installed and available under **Video Add-ons**.
 
