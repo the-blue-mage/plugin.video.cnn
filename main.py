@@ -29,8 +29,6 @@ VIDEOS["LIVE"].append(
     }
 )
 
-)
-
 # Cache to avoid redundant requests
 @lru_cache(maxsize=50)
 def fetch_url(url):
