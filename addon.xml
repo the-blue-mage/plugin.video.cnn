@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.cnn" version="1.0.0" name="Kodi CNN World Grabber" provider-name="the-blue-mage">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.26.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Kodi CNN World Grabber</summary>
+        <description lang="en_GB">Grabs videos and live stream from CNN World/International.</description>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+        <news>Updated with latest artwork metadata</news>
+    </extension>
+</addon>
