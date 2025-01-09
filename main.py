@@ -8,33 +8,28 @@ import xbmcgui
 import xbmcplugin
 
 # Initial VIDEOS dictionary
-VIDEOS = {"LIVE": [], "VIDEOS": []}
+VIDEOS = {"LIVE": [], "WEB VIDEOS": []}
 
 # Append to the LIVE section (static content)
-VIDEOS["LIVE"].append(
+VIDEOS["LIVE"].extend([
     {
         "name": "CNN (US) -- No Geo Restriction",
         "thumb": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/cnn-us.png",
         "video": "https://turnerlive.warnermediacdn.com/hls/live/586495/cnngo/cnn_slate/VIDEO_0_3564000.m3u8",
         "genre": "LIVE",
-    }
-)
-
-VIDEOS["LIVE"].append(
+    },
     {
         "name": "CNN (INTERNATIONAL) -- No Geo Restriction",
         "thumb": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/cnn-us.png",
         "video": "https://turnerlive.warnermediacdn.com/hls/live/586497/cnngo/cnni/VIDEO_0_3564000.m3u8",
         "genre": "LIVE",
     }
-)
+])
 
 # Cache page fetches with increased size
 @lru_cache(maxsize=100)
 def fetch_url(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
@@ -48,20 +43,21 @@ meta_cache = {}
 def get_meta(url):
     if url in meta_cache:
         return meta_cache[url]
+   
     content = fetch_url(url)
     title = re.search(r"<title>(.*?)</title>", content)
     mp4_link = re.search(r"https?://[^\s\"']+\.mp4", content)
     thumb = re.search(r'<meta\s+name="twitter:image"\s+content="([^"]+)"', content)
     meta = [
         mp4_link.group(0) if mp4_link else None,
-        title.group(1) if title else None,
+        title.group(1) if title else "Unknown Title",
         thumb.group(1).split("?")[0] if thumb else None,
     ]
     meta_cache[url] = meta
     return meta
 
 # List and populate videos
-def list_videos(VIDEOS):
+def list_videos():
     url = "https://edition.cnn.com/world"
     content = fetch_url(url)
     if not content:
@@ -75,17 +71,17 @@ def list_videos(VIDEOS):
     for link in links:
         item = get_meta(link)
         if item[0]:  # Only add if a valid video link exists
-            VIDEOS["VIDEOS"].append(
+            VIDEOS["WEB VIDEOS"].append(
                 {
-                    "name": item[1].replace(" | CNN", "") if item[1] else "Unknown Title",
+                    "name": item[1],
                     "thumb": item[2],
                     "video": item[0],
-                    "genre": "VIDEOS",
+                    "genre": "WEB VIDEOS",
                 }
             )
 
 # Populate the VIDEOS dictionary
-list_videos(VIDEOS)
+list_videos()
 
 # Kodi plugin functions
 def get_url(**kwargs):
@@ -102,16 +98,8 @@ def list_categories():
     xbmcplugin.setContent(int(sys.argv[1]), "videos")
     for category in get_categories():
         list_item = xbmcgui.ListItem(label=category)
-        list_item.setArt(
-            {
-                "thumb": VIDEOS[category][0]["thumb"],
-                "icon": VIDEOS[category][0]["thumb"],
-                "fanart": VIDEOS[category][0]["thumb"],
-            }
-        )
-        list_item.setInfo(
-            "video", {"title": category, "genre": category, "mediatype": "video"}
-        )
+        list_item.setArt({"thumb": VIDEOS[category][0]["thumb"], "icon": VIDEOS[category][0]["thumb"], "fanart": VIDEOS[category][0]["thumb"]})
+        list_item.setInfo("video", {"title": category, "genre": category, "mediatype": "video"})
         url = get_url(action="listing", category=category)
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, list_item, True)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
@@ -125,36 +113,16 @@ def list_videos_kodi(category):
     xbmcplugin.setPluginCategory(int(sys.argv[1]), category)
     xbmcplugin.setContent(int(sys.argv[1]), "videos")
 
-    if category == "LIVE":
-        # Handle the LIVE category explicitly to avoid unnecessary operations
-        for video in VIDEOS["LIVE"]:
-            list_item = xbmcgui.ListItem(label=video["name"])
-            list_item.setInfo(
-                "video",
-                {"title": video["name"], "genre": "LIVE", "mediatype": "video"},
-            )
-            list_item.setArt(
-                {"thumb": video["thumb"], "icon": video["thumb"], "fanart": video["thumb"]}
-            )
-            list_item.setProperty("IsPlayable", "true")
-            url = get_url(action="play", video=video["video"])
-            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, list_item, False)
-    else:
-        # Handle other categories dynamically
-        for video in VIDEOS[category]:
-            list_item = xbmcgui.ListItem(label=video["name"])
-            list_item.setInfo(
-                "video",
-                {"title": video["name"], "genre": video["genre"], "mediatype": "video"},
-            )
-            list_item.setArt(
-                {"thumb": video["thumb"], "icon": video["thumb"], "fanart": video["thumb"]}
-            )
-            list_item.setProperty("IsPlayable", "true")
-            url = get_url(action="play", video=video["video"])
-            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, list_item, False)
+    videos = VIDEOS["LIVE"] if category == "LIVE" else VIDEOS[category]
+   
+    for video in videos:
+        list_item = xbmcgui.ListItem(label=video["name"])
+        list_item.setInfo("video", {"title": video["name"], "genre": video["genre"], "mediatype": "video"})
+        list_item.setArt({"thumb": video["thumb"], "icon": video["thumb"], "fanart": video["thumb"]})
+        list_item.setProperty("IsPlayable", "true")
+        url = get_url(action="play", video=video["video"])
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, list_item, False)
 
-    # End of directory with caching to disk enabled for better performance
     xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)
 
 def play_video(path):
@@ -169,7 +137,7 @@ def router(paramstring):
         elif params["action"] == "play":
             play_video(params["video"])
         else:
-            raise ValueError("Invalid paramstring: {0}!".format(paramstring))
+            raise ValueError(f"Invalid paramstring: {paramstring}!")
     else:
         list_categories()
 
