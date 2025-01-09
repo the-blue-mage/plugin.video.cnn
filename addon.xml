@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.cnn" version="1.0.4" name="CNN Grabber" provider-name="the-blue-mage">
+<addon id="plugin.video.cnn" version="1.0.5" name="CNN Grabber" provider-name="the-blue-mage">
     <license>GPL-2.0</license>
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -15,6 +15,8 @@
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
         </assets>
-        <news>Version 1.0.4: Performance improvements and optimized video fetching logic.</news>
+        <news>
+            Version 1.0.5: Improved static video generation, fixed performance issues, and added caching for faster access.
+        </news>
     </extension>
 </addon>
