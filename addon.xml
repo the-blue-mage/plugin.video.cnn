@@ -15,6 +15,6 @@
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
         </assets>
-        <news>Version 1.0.2: Performance improvements and optimized video fetching logic.</news>
+        <news>Version 1.0.4: Performance improvements and optimized video fetching logic.</news>
     </extension>
 </addon>
